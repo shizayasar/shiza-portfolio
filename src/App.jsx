@@ -280,7 +280,7 @@ function App() {
           <p>About me</p>
 
           <h2>
-            Code meets
+            Code meets creativity.
             <br />
             <span>creativity.</span>
           </h2>
