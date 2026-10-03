@@ -294,7 +294,6 @@ function App() {
         >
           <p>
             I’m a Computer Science student at the University of La Verne, creating interactive games, robotics projects, and digital experiences. I like combining code and design to build things that are playful, intuitive, and fun to use.
-          </p>
 
           <p>
             From motion-controlled games to computer-vision robotics, I enjoy
