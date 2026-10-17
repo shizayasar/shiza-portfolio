@@ -1,381 +1,360 @@
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import "./App.css"
 
+// Add a `link` to a project (GitHub repo, demo video, itch.io page...)
+// and a "View project" link will appear on its card.
 const projects = [
   {
-    number: "01",
     title: "3D-Printed Robotic Arm",
-    category: "Robotics + Computer Vision",
+    category: "Robotics and computer vision",
     description:
-      "A computer-vision controlled robotic arm designed to mirror human hand and finger movements through real-time webcam tracking.",
-    tools: ["Python", "Computer Vision", "Servo Motors", "3D Printing"],
-    className: "robot-project",
-    visual: "✦",
+      "A robotic arm that copies your hand's movements in real time. A webcam tracks the hand with OpenCV and MediaPipe, Python turns each finger's position into servo angles, and an Arduino drives the servos in the 3D-printed arm.",
+    tools: ["Python", "OpenCV", "MediaPipe", "Arduino", "3D Printing"],
+    visual: "arm",
+    link: "https://github.com/shizayasar/cv-robotic-arm",
   },
   {
-    number: "02",
-    title: "Gyroscope Boxing Game",
-    category: "Game Development",
+    title: "Dusk Catchers",
+    category: "Game development, in progress",
     description:
-      "A motion-controlled boxing game built in Unity that translates real-world player movement into responsive in-game actions.",
-    tools: ["Unity 3D", "C#", "Gyroscope Sensors", "Game Design"],
-    className: "boxing-project",
-    visual: "🥊",
+      "A cozy, no-fail co-op game for two players on one keyboard. Two tiny critters carry fireflies home along a glowing string to light up a sleeping village's lanterns. Built in C++ with raylib, with a focus on game feel and local co-op.",
+    tools: ["C++17", "raylib", "CMake", "Game Design"],
+    visual: "dusk",
+    link: "https://github.com/shizayasar/dusk-catchers",
   },
 ]
 
-const skills = [
-  "C++",
-  "C#",
-  "Python",
-  "JavaScript",
-  "React",
-  "Unity 3D",
-  "UI Design",
-  "Game Design",
-  "Arduino",
-  "3D Printing",
-  "Computer Vision",
-  "Robotics",
+const toolkit = [
+  { group: "Languages", items: ["C++", "C#", "Python", "JavaScript"] },
+  { group: "Games", items: ["Unity 3D", "Game Design", "UI Design"] },
+  { group: "Hardware", items: ["Arduino", "3D Printing", "Computer Vision", "Robotics"] },
+  { group: "Web", items: ["React"] },
 ]
 
+const allSkills = toolkit.flatMap(({ items }) => items)
+
+const SPARKLE =
+  "M0,-12 C1.6,-3 3,-1.6 12,0 C3,1.6 1.6,3 0,12 C-1.6,3 -3,1.6 -12,0 C-3,-1.6 -1.6,-3 0,-12Z"
+
+function OrbitArt() {
+  return (
+    <svg
+      className="orbit-art"
+      viewBox="0 0 400 400"
+      role="img"
+      aria-label="A small rose-colored planet with a ring, an orbiting moon and twinkling stars"
+    >
+      <defs>
+        <radialGradient id="planet" cx="38%" cy="32%" r="75%">
+          <stop offset="0%" stopColor="#F3C6D1" />
+          <stop offset="55%" stopColor="#D9798F" />
+          <stop offset="100%" stopColor="#A9465F" />
+        </radialGradient>
+        <clipPath id="planet-clip">
+          <circle cx="200" cy="200" r="92" />
+        </clipPath>
+      </defs>
+
+      {/* outer orbit with a moon */}
+      <circle className="orbit-path" cx="200" cy="200" r="172" />
+      <g className="moon-orbit">
+        <circle className="moon" cx="200" cy="28" r="11" />
+      </g>
+
+      {/* back half of the ring */}
+      <g transform="rotate(-16 200 200)">
+        <path className="ring ring-back" d="M42,200 A158,40 0 0 1 358,200" />
+      </g>
+
+      {/* planet */}
+      <circle cx="200" cy="200" r="92" fill="url(#planet)" />
+      <g clipPath="url(#planet-clip)" className="planet-bands">
+        <path d="M100,170 C160,150 240,185 300,160" />
+        <path d="M100,232 C170,215 230,250 300,228" />
+      </g>
+
+      {/* front half of the ring */}
+      <g transform="rotate(-16 200 200)">
+        <path className="ring ring-front" d="M42,200 A158,40 0 0 0 358,200" />
+      </g>
+
+      {/* stars */}
+      <g className="sparkles">
+        <path d={SPARKLE} transform="translate(318 84) scale(1.6)" style={{ animationDelay: "0s" }} />
+        <path d={SPARKLE} transform="translate(276 54) scale(0.7)" style={{ animationDelay: "1.1s" }} />
+        <path d={SPARKLE} transform="translate(72 300) scale(1.1)" style={{ animationDelay: "0.6s" }} />
+        <path d={SPARKLE} transform="translate(350 296) scale(0.8)" style={{ animationDelay: "1.8s" }} />
+        <path d={SPARKLE} transform="translate(196 196) scale(0.9)" className="core-sparkle" style={{ animationDelay: "2.3s" }} />
+      </g>
+      <circle className="star-dot" cx="96" cy="96" r="4" />
+      <circle className="star-dot" cx="300" cy="350" r="3" />
+    </svg>
+  )
+}
+
+function ArmArt() {
+  return (
+    <svg className="project-art" viewBox="0 0 240 200" aria-hidden="true">
+      <rect x="40" y="168" width="80" height="14" rx="7" className="art-fill" />
+      <path d="M80,168 L96,108 L160,70" className="art-line" />
+      <path d="M160,70 L188,56 M160,70 L190,84" className="art-line thin" />
+      <circle cx="80" cy="166" r="9" className="art-joint" />
+      <circle cx="96" cy="108" r="9" className="art-joint" />
+      <circle cx="160" cy="70" r="8" className="art-joint" />
+      <path d={SPARKLE} transform="translate(206 40) scale(0.8)" className="art-spark" />
+    </svg>
+  )
+}
+
+function DuskArt() {
+  return (
+    <svg className="project-art" viewBox="0 0 240 200" aria-hidden="true">
+      {/* lantern */}
+      <path d="M196,34 L196,52" className="dusk-cord" />
+      <rect x="182" y="52" width="28" height="36" rx="8" className="dusk-lantern" />
+      <circle cx="196" cy="70" r="22" className="dusk-glow" />
+      {/* glowing string between the two critters */}
+      <path d="M52,150 C92,108 132,176 176,138" className="dusk-string" />
+      {/* fireflies */}
+      <circle cx="84" cy="128" r="4.5" className="dusk-firefly" />
+      <circle cx="118" cy="146" r="4" className="dusk-firefly" />
+      <circle cx="148" cy="148" r="4.5" className="dusk-firefly" />
+      <circle cx="132" cy="98" r="3" className="dusk-firefly" />
+      <circle cx="58" cy="92" r="3" className="dusk-firefly" />
+      {/* critters */}
+      <ellipse cx="44" cy="162" rx="20" ry="16" className="dusk-critter" />
+      <circle cx="38" cy="158" r="2.5" className="dusk-eye" />
+      <circle cx="50" cy="158" r="2.5" className="dusk-eye" />
+      <ellipse cx="186" cy="150" rx="20" ry="16" className="dusk-critter alt" />
+      <circle cx="180" cy="146" r="2.5" className="dusk-eye" />
+      <circle cx="192" cy="146" r="2.5" className="dusk-eye" />
+    </svg>
+  )
+}
+
 function App() {
+  const reduceMotion = useReducedMotion()
+  const rise = (delay) =>
+    reduceMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 18 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+        }
+
   return (
     <div className="portfolio">
-      <div className="background-grid" />
-
-      {/* Navigation */}
       <nav className="navbar">
-        <motion.a
-          href="#home"
-          className="logo"
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          SY<span>.</span>
-        </motion.a>
+        <a href="#home" className="brand">
+          <img src="/logo.png" alt="" width="36" height="36" />
+          Shiza Yasar
+        </a>
 
-        <motion.div
-          className="nav-links"
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-        >
-          <a href="#work">Work</a>
+        <div className="nav-links">
+          <a href="#work">Projects</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
-        </motion.div>
+        </div>
       </nav>
 
-      {/* Hero */}
-      <section id="home" className="hero">
-        <motion.div
-          className="pink-orb orb-one"
-          animate={{
-            y: [0, -25, 0],
-            rotate: [0, 8, 0],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        <motion.div
-          className="pink-orb orb-two"
-          animate={{
-            y: [0, 30, 0],
-            rotate: [0, -10, 0],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        
-
-        <div className="hero-content">
-          <motion.p
-            className="hero-label"
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Computer Science • Game Development • Creative Tech
-          </motion.p>
-          
-
-          <motion.h1
-            initial={{ opacity: 0, y: 45 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            Hi, I'm <span>Shiza.</span>
-            <br />
-            I build things that
-            <br />
-            <em>move, play & interact.</em>
+      <header id="home" className="hero">
+        <div className="hero-text">
+          <motion.h1 {...rise(0.04)}>
+            Hi, I'm Shiza. I make games, robots, and the code that connects
+            them.
           </motion.h1>
-          
 
-          <motion.p
-            className="hero-description"
-            initial={{ opacity: 0, y: 35 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.7 }}
-          >
-            I combine code, game development, robotics, and design to create
-            interactive experiences that feel as good as they function.
+          <motion.p className="hero-description" {...rise(0.16)}>
+            I study computer science at the University of La Verne and build
+            interactive projects, from a cozy co-op game written in C++ to a
+            robotic arm that copies your hand in real time.
           </motion.p>
 
-          <motion.div
-            className="hero-buttons"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <a href="#work" className="button pink-button">
-              Explore my work ↓
+          <motion.div className="hero-buttons" {...rise(0.24)}>
+            <a href="#work" className="button primary-button">
+              See my projects
             </a>
-
             <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noreferrer"
-            className="button outline-button"
-          >
-            View resume
-          </a>
+              href="/resume.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="button outline-button"
+            >
+              View resume
+            </a>
           </motion.div>
 
-          <motion.p
-      className="location"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.7 }}
-    >
-      Based in Los Angeles, CA
-    </motion.p>
+          <motion.p className="location" {...rise(0.32)}>
+            Based in Los Angeles, CA
+          </motion.p>
         </div>
 
         <motion.div
-          className="scroll-indicator"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.6 }}
+          className="hero-art"
+          initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          scroll
-          <span>↓</span>
+          <OrbitArt />
         </motion.div>
-      </section>
+      </header>
 
       {/* Moving skills bar */}
-      <section className="ticker-section">
-        <div className="ticker">
-          <div className="ticker-content">
-            {[...skills, ...skills].map((skill, index) => (
-              <span key={index}>
-                {skill}
-                <b>✦</b>
-              </span>
-            ))}
-          </div>
-        </div>
+      <section className="ticker" aria-label="Skills">
+        <ul className="ticker-track">
+          {[...allSkills, ...allSkills].map((skill, index) => (
+            <li key={index} aria-hidden={index >= allSkills.length}>
+              {skill}
+              <svg viewBox="-14 -14 28 28" aria-hidden="true">
+                <path d={SPARKLE} />
+              </svg>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      {/* Projects */}
-      <section id="work" className="work-section">
-        <motion.div
-          className="section-heading"
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          <p>Selected Work</p>
-          <h2>
-            Things I've <span>built.</span>
-          </h2>
-        </motion.div>
+      <main>
+        <section id="work" className="work-section">
+          <h2 className="section-title">Projects</h2>
 
-        <div className="projects">
-          {projects.map((project, index) => (
-            <motion.article
-              key={project.title}
-              className={`project ${project.className}`}
-              initial={{ opacity: 0, y: 70 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7 }}
-              whileHover={{ y: -8 }}
-            >
-              <div className="project-visual">
-                <motion.div
-                  className="visual-circle"
-                  whileHover={{
-                    rotate: 10,
-                    scale: 1.08,
-                  }}
-                  transition={{ type: "spring", stiffness: 200 }}
-                >
-                  {project.visual}
-                </motion.div>
-
-                <span className="project-number">{project.number}</span>
-
-                <motion.div
-                  className="floating-dot dot-one"
-                  animate={{ y: [0, -12, 0] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 3,
-                    delay: index,
-                  }}
-                />
-
-                <motion.div
-                  className="floating-dot dot-two"
-                  animate={{ y: [0, 14, 0] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 4,
-                    delay: index * 0.5,
-                  }}
-                />
-              </div>
-
-              <div className="project-info">
-                <p className="project-category">{project.category}</p>
-
-                <h3>{project.title}</h3>
-
-                <p className="project-description">
-                  {project.description}
-                </p>
-
-                <div className="tool-list">
-                  {project.tools.map((tool) => (
-                    <span key={tool}>{tool}</span>
-                  ))}
+          <div className="projects">
+            {projects.map((project) => (
+              <article
+                key={project.title}
+                className={`project${project.link ? " has-link" : ""}`}
+              >
+                <div className={`project-visual visual-${project.visual}`}>
+                  {project.visual === "arm" ? <ArmArt /> : <DuskArt />}
                 </div>
 
-                <button className="project-link">
-                  View project <span>↗</span>
-                </button>
-              </div>
-            </motion.article>
-          ))}
-        </div>
-      </section>
+                <div className="project-info">
+                  <p className="project-category">{project.category}</p>
+                  <h3>{project.title}</h3>
+                  <p className="project-description">{project.description}</p>
 
-      {/* About */}
-      <section id="about" className="about-section">
-        <motion.div
-          className="about-title"
-          initial={{ opacity: 0, x: -40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          <p>About me</p>
+                  <ul className="tool-list" aria-label="Tools used">
+                    {project.tools.map((tool) => (
+                      <li key={tool}>{tool}</li>
+                    ))}
+                  </ul>
 
-          <h2>
-            Code meets
-            <br />
-            <span>creativity.</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          className="about-content"
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-        >
-          <p>
-            I’m a Computer Science student at the University of La Verne, creating interactive games, robotics projects, and digital experiences. I like combining code and design to build things that are playful, intuitive, and fun to use.
-          </p>
-
-          <p>
-            From motion-controlled games to computer-vision robotics, I enjoy
-            taking ideas and turning them into experiences people can actually
-            interact with.
-          </p>
-
-          <div className="mini-skills">
-            {skills.slice(0, 8).map((skill, index) => (
-              <motion.span
-                key={skill}
-                whileHover={{
-                  scale: 1.08,
-                  rotate: index % 2 === 0 ? 2 : -2,
-                }}
-              >
-                {skill}
-              </motion.span>
+                  {project.link && (
+                    <a
+                      className="project-link"
+                      href={project.link}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {project.link.includes("github.com")
+                        ? "View on GitHub"
+                        : "View project"}
+                    </a>
+                  )}
+                </div>
+              </article>
             ))}
           </div>
-        </motion.div>
-      </section>
+        </section>
 
-      {/* Fun statement */}
-      <motion.section
-        className="statement-section"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <p>
-          I'm interested in building things that are
-          <span> useful, playful, and a little unexpected.</span>
-        </p>
-      </motion.section>
+        <section id="about" className="about-section">
+          <h2 className="section-title">About</h2>
 
-      {/* Contact */}
+          <div className="about-grid">
+            <div className="about-text">
+              <p>
+                I'm a computer science student at the University of La Verne
+                who likes building things people can pick up and play with. I
+                enjoy the whole process: writing the code, designing how it
+                feels to use, and wiring up the hardware when a project needs
+                it.
+              </p>
+              <p>
+                I'm working toward a career in the games industry, and I'm
+                most at home where code meets design, whether that's a co-op
+                game about fireflies or a robot that copies your hand.
+              </p>
+
+              <div className="currently">
+                <svg viewBox="-14 -14 28 28" aria-hidden="true">
+                  <path d={SPARKLE} />
+                </svg>
+                <p>
+                  <strong>Currently building:</strong> Dusk Catchers, a cozy
+                  two-player co-op game in C++.
+                </p>
+              </div>
+            </div>
+
+            <div className="about-side">
+              <div className="portrait">
+                <img
+                  src="/professional-pic.webp"
+                  alt="Shiza Yasar"
+                  width="720"
+                  height="720"
+                  loading="lazy"
+                />
+                <svg viewBox="-14 -14 28 28" aria-hidden="true">
+                  <path d={SPARKLE} />
+                </svg>
+              </div>
+
+              <dl className="toolkit">
+                {toolkit.map(({ group, items }) => (
+                  <div key={group} className="toolkit-row">
+                    <dt>{group}</dt>
+                    <dd>
+                      {items.map((item) => (
+                        <span key={item}>{item}</span>
+                      ))}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </div>
+        </section>
+      </main>
+
       <section id="contact" className="contact-section">
-        <motion.div
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <p className="contact-small">Have something interesting in mind?</p>
+        <div className="night-sky" aria-hidden="true">
+          {[
+            [8, 22], [18, 70], [31, 38], [47, 82], [62, 18],
+            [74, 58], [86, 30], [93, 76], [55, 48], [24, 12],
+          ].map(([x, y], i) => (
+            <span key={i} style={{ left: `${x}%`, top: `${y}%` }} />
+          ))}
+        </div>
 
-          <h2>
-            Let's build
-            <br />
-            something <span>cool.</span>
-          </h2>
+        <div className="contact-inner">
+          <h2>Want to work together?</h2>
+          <p className="contact-text">
+            I'm always happy to talk about games, internships, or a project
+            you're working on.
+          </p>
 
-          <a
-            className="email"
-            href="mailto:shiza.yasar@gmail.com"
-          >
-            shiza.yasar@gmail.com ↗
+          <a className="email" href="mailto:shiza.yasar@gmail.com">
+            shiza.yasar@gmail.com
           </a>
 
           <div className="social-links">
-            <a
-              href="https://www.linkedin.com/in/shizayasar/"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://www.linkedin.com/in/shizayasar/" target="_blank" rel="noreferrer">
               LinkedIn
             </a>
-
-            <a
-              href="https://github.com/shizayasar"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://github.com/shizayasar" target="_blank" rel="noreferrer">
               GitHub
             </a>
+            <a href="/resume.pdf" target="_blank" rel="noreferrer">
+              Resume
+            </a>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       <footer>
-        <p>Designed & built by Shiza Yasar ✦</p>
-        <p>2026</p>
+        <p>Designed and built by Shiza Yasar</p>
+        <p>© 2026</p>
       </footer>
     </div>
   )
