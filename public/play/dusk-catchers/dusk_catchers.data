@@ -1,0 +1,156 @@
+# Evening 1: First light
+# An open meadow, only common fireflies, and the village close by.
+# Learn to gather and carry.
+
+name First light
+length 180                  # seconds from sunset to full dark
+critters 320 270 640 270    # where critter 1 and critter 2 start: x y x y
+fireflies 12                # how many are out in the meadow at once
+meadow 40 40 560 460        # where fireflies appear: x y width height
+mix common 100              # chance of each kind: common, shy, pair
+
+# The village, on the right. One line per lantern: x y
+lantern 720 100
+lantern 860 140
+lantern 780 230
+lantern 900 290
+lantern 700 370
+lantern 830 410
+lantern 910 480
+# Evening 2: Shy ones
+# Shy fireflies dart away from critters. Brush past them from a distance,
+# using the length of the string.
+
+name Shy ones
+critters 300 380 560 380
+meadow 40 60 560 440
+mix common 60 shy 40
+
+# The village, up in the top-right corner.
+lantern 700 90
+lantern 820 70
+lantern 920 130
+lantern 760 190
+lantern 880 240
+lantern 720 300
+lantern 900 360
+# Evening 3: Partners
+# Pair fireflies only cling when one sweep of the string touches both.
+# This time the meadow is on the right and the village on the left.
+
+name Partners
+critters 420 270 680 270
+meadow 380 40 540 460
+mix common 50 shy 20 pair 30
+
+# The village, on the left.
+lantern 60 110
+lantern 180 70
+lantern 120 210
+lantern 250 180
+lantern 70 330
+lantern 200 300
+lantern 140 450
+# Evening 4: The long way home
+# A fence with two gaps and a few trees stand between the meadow and the
+# village. Critters can't walk through them, and the string snags if it
+# crosses one, so thread it through the gaps together.
+
+name The long way home
+critters 140 270 380 270
+meadow 40 40 440 460
+mix common 60 shy 20 pair 20
+
+# The fence: three sections with gaps at y 150-230 and 340-420. (x y width height)
+fence 560 0 16 150
+fence 560 230 16 110
+fence 560 420 16 120
+
+# Trees on both sides of the fence. (x y radius)
+tree 470 110 30
+tree 480 440 26
+tree 650 290 34
+tree 660 480 24
+
+# The village, beyond the fence.
+lantern 760 90
+lantern 880 150
+lantern 790 230
+lantern 910 300
+lantern 760 380
+lantern 870 430
+lantern 920 500
+# Evening 5: Breezy night
+# Gusts blow from the village toward the meadow, pushing the critters and
+# straining the string like a sail. Point the string into the wind and keep
+# it short when a gust comes.
+
+name Breezy night
+critters 160 270 400 270
+meadow 40 40 480 460
+mix common 50 shy 25 pair 25
+wind 90 180                 # strength (px/s) and direction in degrees (180 blows left)
+
+# The village, upwind on the right.
+lantern 700 120
+lantern 830 80
+lantern 900 200
+lantern 760 260
+lantern 880 340
+lantern 720 420
+lantern 850 470
+# Evening 6: The footbridge
+# A stream runs between the meadow and the village. Critters can't wade
+# through it, and the only way across is a footbridge too narrow for two
+# side by side, so cross single file. The string can pass over the water.
+
+name The footbridge
+critters 160 270 400 270
+meadow 40 40 460 460
+mix common 50 shy 25 pair 25
+
+# The stream, in two parts with a 60-pixel gap between them. (x y width height)
+water 560 0 80 240
+water 560 300 80 240
+# The bridge is drawn over the gap, a little wider than the stream.
+bridge 548 240 104 60
+
+# The village, across the stream.
+lantern 720 100
+lantern 860 90
+lantern 790 200
+lantern 910 260
+lantern 730 330
+lantern 850 400
+lantern 750 470
+# Evening 7: Festival night
+# Everything at once: every kind of firefly, golden ones included, a fence
+# and trees to thread through, and a light wind. Light the big lantern in
+# the town square with a single delivery of at least 10 fireflies.
+
+name Festival night
+critters 140 270 360 270
+fireflies 14
+meadow 40 40 400 460
+mix common 40 shy 25 pair 35
+golden                      # golden fireflies appear when both critters stand still
+wind 60 270                 # a light wind blowing up the screen
+
+# A fence with two gaps between the meadow and the town.
+fence 500 0 14 170
+fence 500 250 14 60
+fence 500 390 14 150
+
+# Trees.
+tree 440 460 24
+tree 600 110 26
+tree 610 450 26
+
+# The town square: the big lantern (x y and the load it needs) and its ring.
+biglantern 770 270 10
+lantern 690 160
+lantern 860 120
+lantern 910 250
+lantern 880 400
+lantern 720 410
+lantern 640 290

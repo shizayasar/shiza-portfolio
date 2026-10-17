@@ -21,6 +21,7 @@ const projects = [
     tools: ["C++17", "raylib", "CMake", "Game Design"],
     visual: "dusk",
     link: "https://github.com/shizayasar/dusk-catchers",
+    play: "/play/dusk-catchers/index.html",
   },
 ]
 
@@ -238,6 +239,17 @@ function App() {
                       <li key={tool}>{tool}</li>
                     ))}
                   </ul>
+
+                  {project.play && (
+                    <a
+                      className="button primary-button play-link"
+                      href={project.play}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Play in browser
+                    </a>
+                  )}
 
                   {project.link && (
                     <a

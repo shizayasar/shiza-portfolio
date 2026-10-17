@@ -769,3 +769,11 @@ footer {
     display: none;
   }
 }
+
+/* "Play in browser" button: sits above the card's full-size GitHub link */
+.play-link {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  margin-top: 28px;
+}
