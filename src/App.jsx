@@ -2,7 +2,8 @@ import { motion, useReducedMotion } from "framer-motion"
 import "./App.css"
 
 // Add a `link` to a project (GitHub repo, demo video, itch.io page...)
-// and a "View project" link will appear on its card.
+// and a "View project" link will appear on its card. Add `play` for a
+// playable demo: the card then opens the demo when clicked.
 const projects = [
   {
     title: "3D-Printed Robotic Arm",
@@ -223,7 +224,7 @@ function App() {
             {projects.map((project) => (
               <article
                 key={project.title}
-                className={`project${project.link ? " has-link" : ""}`}
+                className={`project${project.play || project.link ? " has-link" : ""}`}
               >
                 <div className={`project-visual visual-${project.visual}`}>
                   {project.visual === "arm" ? <ArmArt /> : <DuskArt />}
@@ -242,7 +243,7 @@ function App() {
 
                   {project.play && (
                     <a
-                      className="button primary-button play-link"
+                      className="button primary-button play-link stretched"
                       href={project.play}
                       target="_blank"
                       rel="noreferrer"
@@ -253,7 +254,7 @@ function App() {
 
                   {project.link && (
                     <a
-                      className="project-link"
+                      className={`project-link${project.play ? "" : " stretched"}`}
                       href={project.link}
                       target="_blank"
                       rel="noreferrer"

@@ -348,10 +348,19 @@ h3 {
   box-shadow: 0 18px 40px rgba(36, 29, 51, 0.08);
 }
 
-.project.has-link .project-link::after {
+/* the card's main link stretches over the whole card, so clicking
+   anywhere on it follows that link (the demo if there is one) */
+.project.has-link .stretched::after {
   content: "";
   position: absolute;
   inset: 0;
+}
+
+/* any other link on the card sits above the stretched one */
+.project.has-link .project-link:not(.stretched),
+.project.has-link .play-link:not(.stretched) {
+  position: relative;
+  z-index: 1;
 }
 
 .project-visual {
@@ -770,10 +779,8 @@ footer {
   }
 }
 
-/* "Play in browser" button: sits above the card's full-size GitHub link */
+/* "Play in browser" button */
 .play-link {
-  position: relative;
-  z-index: 1;
   align-self: flex-start;
   margin-top: 28px;
 }
