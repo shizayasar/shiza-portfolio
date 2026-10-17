@@ -252,6 +252,16 @@ function App() {
                     </a>
                   )}
 
+                  {project.play && (
+                    <p className="desktop-note">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="12" rx="2" />
+                        <path d="M8 20h8M12 16v4" />
+                      </svg>
+                      Playable web version available on desktop
+                    </p>
+                  )}
+
                   {project.link && (
                     <a
                       className={`project-link${project.play ? "" : " stretched"}`}

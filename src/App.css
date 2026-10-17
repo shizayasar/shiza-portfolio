@@ -784,3 +784,52 @@ footer {
   align-self: flex-start;
   margin-top: 28px;
 }
+
+/* Note that replaces the Play button on phones and tablets */
+.desktop-note {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  margin-top: 24px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  background: var(--lilac);
+  line-height: 1.35;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.desktop-note svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--rose);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Touch devices (phones, tablets): the game needs a keyboard, so hide
+   the Play button, show the note, and let the card open GitHub instead */
+@media (hover: none) and (pointer: coarse) {
+  .play-link {
+    display: none;
+  }
+
+  .desktop-note {
+    display: inline-flex;
+  }
+
+  .project.has-link .project-link:not(.stretched) {
+    position: static;
+  }
+
+  .project.has-link .project-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+}
