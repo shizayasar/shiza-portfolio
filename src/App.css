@@ -499,8 +499,8 @@ h3 {
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 72px;
+  grid-template-columns: 280px 1fr;
+  gap: 64px;
   align-items: start;
 }
 
@@ -537,14 +537,9 @@ h3 {
   color: var(--ink);
 }
 
-.about-side {
-  display: grid;
-  gap: 40px;
-}
-
 .portrait {
   position: relative;
-  width: min(100%, 260px);
+  width: min(100%, 280px);
 }
 
 .portrait img {
@@ -565,21 +560,25 @@ h3 {
   fill: var(--rose-bright);
 }
 
+/* skills: four groups side by side under the photo and text */
 .toolkit {
   display: grid;
-  gap: 22px;
+  grid-template-columns: repeat(4, auto);
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
 }
 
 .toolkit-row {
   display: grid;
-  gap: 10px;
-  padding-bottom: 22px;
-  border-bottom: 1px solid var(--line);
+  align-content: start;
+  gap: 12px;
 }
 
-.toolkit-row:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.toolkit dd {
+  max-width: 300px;
 }
 
 .toolkit dt {
@@ -603,94 +602,109 @@ h3 {
   font-weight: 500;
 }
 
-/* CONTACT */
+/* CONTACT
+   Soft pink to match the header, so the page starts and ends in pink. */
 
 .contact-section {
   position: relative;
   overflow: hidden;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 112px 0;
+  background: var(--blush);
+  color: var(--ink);
+  padding: 104px 0 96px;
 }
 
+/* little rose stars scattered behind the text */
 .night-sky span {
   position: absolute;
-  width: 3px;
-  height: 3px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: #F4D3DB;
-  opacity: 0.55;
+  background: var(--rose-bright);
+  opacity: 0.45;
 }
 
 .night-sky span:nth-child(3n) {
-  width: 5px;
-  height: 5px;
-  background: var(--rose-bright);
+  width: 7px;
+  height: 7px;
+  background: var(--rose);
+  opacity: 0.35;
 }
 
 .contact-inner {
   position: relative;
   width: var(--page);
   margin: 0 auto;
+  text-align: center;
 }
 
 .contact-section h2 {
   font-size: clamp(38px, 5vw, 60px);
-  line-height: 1.05;
-  max-width: 16ch;
+  line-height: 1.08;
+  text-wrap: balance;
 }
 
 .contact-text {
-  margin-top: 18px;
-  max-width: 48ch;
+  margin: 16px auto 0;
+  max-width: 44ch;
   font-size: 19px;
-  color: #CFC8DA;
+  color: var(--muted);
+  text-wrap: balance;
 }
 
+/* email as the main button */
 .email {
-  display: inline-block;
+  display: inline-flex;
   margin-top: 36px;
+  padding: 16px 30px;
+  border-radius: 999px;
+  background: var(--rose);
+  color: #fff;
   font-family: var(--display);
-  font-size: clamp(22px, 2.6vw, 30px);
-  font-weight: 500;
-  color: #F4D3DB;
-  border-bottom: 2px solid var(--rose-bright);
-  padding-bottom: 4px;
-  transition: color 0.2s ease;
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 600;
+  transition: background 0.2s ease;
 }
 
 .email:hover {
-  color: #fff;
+  background: #9C3A51;
 }
 
 .social-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 28px;
-  margin-top: 40px;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
   font-weight: 500;
 }
 
 .social-links a {
-  color: #CFC8DA;
-  transition: color 0.2s ease;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1.5px solid #E7AAB8;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ink);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .social-links a:hover {
-  color: var(--rose-bright);
+  border-color: var(--rose);
+  color: var(--rose);
+  background: #fff;
 }
 
 /* FOOTER */
 
 footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 8px;
-  padding: 22px max(24px, calc((100% - 1160px) / 2));
-  background: var(--ink);
-  color: #8E869C;
-  border-top: 1px solid #3A3249;
+  padding: 22px 24px;
+  background: var(--blush);
+  color: var(--muted);
+  border-top: 1px solid #EFC6D1;
   font-size: 14px;
+  text-align: center;
 }
 
 /* MOBILE */
@@ -727,7 +741,14 @@ footer {
   }
 
   .about-grid {
-    gap: 40px;
+    gap: 32px;
+  }
+
+  .toolkit {
+    grid-template-columns: 1fr 1fr;
+    justify-content: stretch;
+    gap: 28px 24px;
+    margin-top: 48px;
   }
 
   .work-section,
@@ -831,5 +852,23 @@ footer {
     content: "";
     position: absolute;
     inset: 0;
+  }
+}
+
+/* DESKTOP HEADER
+   Pink header bar on wider screens only; phones keep the plain header. */
+@media (min-width: 861px) {
+  .navbar {
+    background: var(--blush);
+    box-shadow: 0 0 0 100vmax var(--blush);
+    clip-path: inset(0 -100vmax);
+  }
+
+  .nav-links a {
+    color: var(--ink);
+  }
+
+  .nav-links a:hover {
+    color: var(--rose);
   }
 }

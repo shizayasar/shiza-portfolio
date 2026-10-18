@@ -22,7 +22,7 @@ const projects = [
     tools: ["C++17", "raylib", "CMake", "Game Design"],
     visual: "dusk",
     link: "https://github.com/shizayasar/dusk-catchers",
-    play: "/play/dusk-catchers/index.html",
+    play: "/play/dusk-catchers/",
   },
 ]
 
@@ -284,6 +284,19 @@ function App() {
           <h2 className="section-title">About</h2>
 
           <div className="about-grid">
+            <div className="portrait">
+              <img
+                src="/professional-pic.webp"
+                alt="Shiza Yasar"
+                width="720"
+                height="720"
+                loading="lazy"
+              />
+              <svg viewBox="-14 -14 28 28" aria-hidden="true">
+                <path d={SPARKLE} />
+              </svg>
+            </div>
+
             <div className="about-text">
               <p>
                 I'm a computer science student at the University of La Verne
@@ -308,35 +321,20 @@ function App() {
                 </p>
               </div>
             </div>
-
-            <div className="about-side">
-              <div className="portrait">
-                <img
-                  src="/professional-pic.webp"
-                  alt="Shiza Yasar"
-                  width="720"
-                  height="720"
-                  loading="lazy"
-                />
-                <svg viewBox="-14 -14 28 28" aria-hidden="true">
-                  <path d={SPARKLE} />
-                </svg>
-              </div>
-
-              <dl className="toolkit">
-                {toolkit.map(({ group, items }) => (
-                  <div key={group} className="toolkit-row">
-                    <dt>{group}</dt>
-                    <dd>
-                      {items.map((item) => (
-                        <span key={item}>{item}</span>
-                      ))}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
           </div>
+
+          <dl className="toolkit">
+            {toolkit.map(({ group, items }) => (
+              <div key={group} className="toolkit-row">
+                <dt>{group}</dt>
+                <dd>
+                  {items.map((item) => (
+                    <span key={item}>{item}</span>
+                  ))}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </section>
       </main>
 
